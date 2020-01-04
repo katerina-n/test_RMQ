@@ -1,0 +1,3 @@
+app_order:
+    resource: "@AppBundle/Resources/config/routing/order_routing.yml"
+    prefix:   /order

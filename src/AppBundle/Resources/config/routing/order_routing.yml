@@ -1,0 +1,5 @@
+app_order_create:
+    path:     /create
+    defaults: { _controller: AppBundle:Order:create }
+    options: { i18n: false }
+    methods:  [POST]
