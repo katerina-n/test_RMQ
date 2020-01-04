@@ -15,3 +15,10 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
+
+/bin/*
+!bin/console
+/composer.phar
+.idea
+.DS_Store
+.web-server-pid
