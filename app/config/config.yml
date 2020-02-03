@@ -2,6 +2,9 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: "@AppBundle/Resources/config/services.yml" }
+    - { resource: "@MailBundle/Resources/config/services.yml" }
+    - { resource: "@UserBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -11,6 +14,7 @@ parameters:
 framework:
     #esi: ~
     #translator: { fallbacks: ['%locale%'] }
+    translator: ~
     secret: '%secret%'
     router:
         resource: '%kernel.project_dir%/app/config/routing.yml'
@@ -19,7 +23,7 @@ framework:
     csrf_protection: ~
     validation: { enable_annotations: true }
     #serializer: { enable_annotations: true }
-    default_locale: '%locale%'
+    default_locale: "%locale%"
     trusted_hosts: ~
     session:
         # https://symfony.com/doc/current/reference/configuration/framework.html#handler-id
@@ -30,11 +34,14 @@ framework:
     assets: ~
     php_errors:
         log: true
+    templating:
+        engines: ['twig']
 
 # Twig Configuration
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    form_themes: ['bootstrap_4_layout.html.twig']
 
 # Doctrine Configuration
 doctrine:
@@ -79,8 +86,8 @@ old_sound_rabbit_mq:
             password: 'guest'
             vhost:    '/'
             lazy:     false
-            connection_timeout: 3
-            read_write_timeout: 3
+            connection_timeout: 10
+            read_write_timeout: 10
 
             # requires php-amqplib v2.4.1+ and PHP5.4+
             keepalive: false
@@ -96,25 +103,48 @@ old_sound_rabbit_mq:
             # are given the value from the URL takes precedence.
             # See https://www.rabbitmq.com/uri-spec.html on how to encode values.
             url: 'amqp://guest:password@localhost:5672/vhost?lazy=1&connection_timeout=6'
-#    producers:
-#        order_create:
-#            connection:       default
-#            exchange_options: { name: order_create_ex, type: topic }
-#    consumers:
-#        order_create_bmw:
-#            connection:       default
-#            exchange_options: { name: order_create_ex, type: topic }
+
+    producers:
+        send_email:
+            connection:       default
+            exchange_options: { name: 'notification.v1.send_email', type: direct } #опции для обменника
+
+    consumers:
+        send_email:
+            connection:       default
+            exchange_options: { name: 'notification.v1.send_email', type: direct }
+            queue_options:    { name: 'notification.v1.send_email' }  #опции для очереди
+            callback:         mail.consumer.mail_sender
+
+#        send_email:
+#            connection: default
+#            exchange_options:
+#                name: 'notification.v1.send_email_delayed_30000'
+#                type: direct
 #            queue_options:
-#                name: order_create_bmw_qu
-#                routing_keys:
-#                - 'bmw.#'
-#            callback:         application_frontend.consumer.order_create_bmw
-#        order_create_audi_mercedes:
-#            connection:       default
-#            exchange_options: { name: order_create_ex, type: topic }
-#            queue_options:
-#                name: order_create_audi_mercedes_qu
-#                routing_keys:
-#                - 'audi.*'
-#                - '#.mercedes.*'
-#            callback:         application_frontend.consumer.order_create_audi_mercedes
+#                name: 'notification.v1.send_email_delayed_30000'
+#                arguments:
+#                    x-message-ttl: ['I', 30000]
+#                    x-dead-letter-exchange: ['S', 'notification.v1.send_email']
+#            callback:         mail.consumer.mail_sender
+
+doctrine_migrations:
+    dir_name: "%kernel.root_dir%/DoctrineMigrations"
+    namespace: Migrations
+    table_name: migration_versions
+    name: Application Migrations
+    organize_migrations: false # Version >=1.2 Possible values are: "BY_YEAR", "BY_YEAR_AND_MONTH", false
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb' and 'couchdb'
+    firewall_name: main
+    user_class: UserBundle\Entity\User
+    from_email:
+        address: "%mailer_user%"
+        sender_name: "%mailer_user%"
+
+assetic:
+    debug:          '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~

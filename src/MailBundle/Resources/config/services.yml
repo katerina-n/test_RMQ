@@ -1,0 +1,4 @@
+services:
+    mail.consumer.mail_sender:
+        class: MailBundle\Consumer\MailSenderConsumer
+        arguments: ['@old_sound_rabbit_mq.send_email_producer']

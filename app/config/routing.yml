@@ -5,3 +5,10 @@ app:
 app_default_index:
     path:     /
     defaults: { _controller: AppBundle:Default:index }
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+user:
+    resource: "@UserBundle/Resources/config/routing.yml"
+    prefix:   /user

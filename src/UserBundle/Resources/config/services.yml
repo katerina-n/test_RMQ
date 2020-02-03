@@ -1,0 +1,5 @@
+services:
+    user.user_mail.type:
+        class: UserBundle\Form\UserMailType
+        tags:
+            - { name: form.type }
