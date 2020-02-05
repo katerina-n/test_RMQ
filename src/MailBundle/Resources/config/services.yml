@@ -2,3 +2,12 @@ services:
     mail.consumer.mail_sender:
         class: MailBundle\Consumer\MailSenderConsumer
         arguments: ['@old_sound_rabbit_mq.send_email_producer']
+
+    mail.consumer.mails_queue:
+        class: MailBundle\Consumer\EmailConsumer
+        arguments: ['@service_container']
+
+
+    swiftmailer.mailer.default.spool.rabbitmq:
+        class: MailBundle\Mailer\RabbitMqSpool
+        arguments: ['@service_container']

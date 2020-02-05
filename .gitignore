@@ -14,11 +14,19 @@
 !var/sessions/.gitkeep
 !var/SymfonyRequirements.php
 /vendor/
+/web/build/
 /web/bundles/
 
+/app/bootstrap.php.cache
 /bin/*
 !bin/console
 /composer.phar
+
+/web/assetic/
+/web/assets/
+/web/uploads/*
+
+/var/spool/*
 .idea
-.DS_Store
 .web-server-pid
+.DS_Store
