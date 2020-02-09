@@ -17,6 +17,11 @@
         </field>
         <field name="createDate" type="datetime" column="create_date" nullable="false">
         </field>
+        <field name="isSend" type="boolean" column="is_send">
+        </field>
+        <indexes>
+            <index name="creator_isSend" columns="user_id,is_send"/>
+        </indexes>
         <!--<one-to-many field="userEmails" target-entity="UserBundle\Entity\UserMail" mapped-by="creator" />-->
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="onPrePersist"/>

@@ -23,25 +23,6 @@ class TestConsumerCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
-//        // Create the Transport
-//                $transport = (new \Swift_SmtpTransport('smtp.gmail.com', 587, 'tls'))
-//                    ->setUsername('bpbpqdqd@gmail.com')
-//                    ->setPassword(null)
-//            ;
-//
-//        // Create the Mailer using your created Transport
-//        $mailer = new \Swift_Mailer($transport);
-//
-//        // Create a message
-//        $message = (new \Swift_Message('News Letter Subscription'))
-//            ->setFrom(['app@example.com' => 'A Name'])
-//            ->setTo(['someone@example.com' => 'A Name'])
-//            ->setBody('your message body')
-//        ;
-//
-//        // Send the message
-//        $result = $mailer->send($message);
         for ($i = 0; $i <= 5; $i++) {
             $message = \Swift_Message::newInstance()
                 ->setSubject('Some Subject')

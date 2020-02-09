@@ -5,7 +5,7 @@ namespace UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table(name="user_mail")
+ * @ORM\Table(name="user_mail",indexes={@ORM\Index(name="creator_isSend", columns={"creator", "isSend"})})
  * @ORM\Entity()
  */
 class UserMail
@@ -48,6 +48,12 @@ class UserMail
      *
      */
     private $createDate;
+
+    /**
+     * @var boolean $isSend
+     * @ORM\Column(name="is_send", type="boolean")
+     */
+    private $isSend = false;
 
     /**
      * @return mixed
@@ -129,6 +135,26 @@ class UserMail
         $this->creator = $creator;
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function getIsSend()
+    {
+        return $this->isSend;
+    }
+
+    /**
+     * @param bool $isSend
+     * @return $this
+     */
+    public function setIsSend($isSend)
+    {
+        $this->isSend = $isSend;
+
+        return $this;
+    }
+
 
 
 }

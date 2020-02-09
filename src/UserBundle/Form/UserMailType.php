@@ -2,6 +2,7 @@
 
 namespace UserBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -19,7 +20,12 @@ class UserMailType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('creator', TextType::class, array('attr' => ['readonly' => true]))
+            ->add('creator', EntityType::class, array(
+                'class' => 'UserBundle\Entity\User',
+                'attr' => [
+                    'readonly' => true
+                ]
+            ))
             ->add('sendTo',TextType::class,  array('attr' =>['placeholder'=>'Send To *']))
             ->add('message',TextareaType::class,  array('attr' =>['placeholder'=>'Your Message *']))
         ;
